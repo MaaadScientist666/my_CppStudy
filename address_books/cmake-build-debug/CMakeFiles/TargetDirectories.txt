@@ -1,3 +1,0 @@
-D:/address_books/cmake-build-debug/CMakeFiles/address_books.dir
-D:/address_books/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/address_books/cmake-build-debug/CMakeFiles/rebuild_cache.dir
