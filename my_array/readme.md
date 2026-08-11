@@ -77,35 +77,6 @@ public:
 
 ---
 
-## 已知 Bug 与缺陷
-
-> 详情参见上文对话中的完整分析，此处列出关键问题。
-
-| # | 严重度 | 问题 | 位置 |
-|---|--------|------|------|
-| 1 | 🔴 高 | **自赋值 Use-After-Free**：`a = a` 时先 `delete[]` 再读已释放内存 | `operator=` (第 13–26 行) |
-| 2 | 🔴 高 | **`operator[]` 无越界检查**：负数或超大索引导致 UB | `operator[]` (第 35–37 行) |
-| 3 | 🟡 中 | **`[] ` 与 `push_back` 数据覆盖**：`array[0]=1` 后紧接着 `push_back(3)` 会静默覆盖 | 设计层 |
-| 4 | 🟡 中 | **`operator=` 异常不安全**：先 `delete` 再 `new`，分配失败时对象损坏 | `operator=` (第 13–26 行) |
-| 5 | 🟢 低 | **`cur_size+1` 有符号溢出**：`INT_MAX` 时触发 UB | `my_push_back` (第 48 行) |
-| 6 | 🟢 低 | **头文件 `using namespace std`**：污染所有包含者的命名空间 | `MyArray.hpp` (第 3 行) |
-
----
-
-## 当前演示用例行为
-
-```cpp
-// main.cpp
-MyArray<int> array(3);
-array[0] = 1;            // 写到 p_array[0]，cur_size 仍为 0
-array.my_push_back(3);   // cur_size→1，p_array[0]=3，把 1 覆盖了
-array.my_push_back(4);   // cur_size→2，p_array[1]=4
-
-// 输出：3 4
-// 而非可能期望的：1 3 4
-```
-
----
 
 ## 构建 & 运行
 
